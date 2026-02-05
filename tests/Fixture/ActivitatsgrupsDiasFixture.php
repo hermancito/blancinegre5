@@ -22,8 +22,8 @@ class ActivitatsgrupsDiasFixture extends TestFixture
                 'id' => 1,
                 'activitatsgrup_id' => 1,
                 'dia_id' => 1,
-                'hora_ini' => '11:31:19',
-                'hora_fin' => '11:31:19',
+                'hora_ini' => '13:05:33',
+                'hora_fin' => '13:05:33',
             ],
         ];
         parent::init();

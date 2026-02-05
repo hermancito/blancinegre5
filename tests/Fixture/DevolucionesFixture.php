@@ -26,9 +26,9 @@ class DevolucionesFixture extends TestFixture
                 'concepto' => 'Lorem ipsum dolor sit amet',
                 'actividad' => 'Lorem ipsum dolor sit amet',
                 'observ' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
-                'fecha_dev' => '2026-02-04',
-                'created' => '2026-02-04 11:31:41',
-                'modified' => '2026-02-04 11:31:41',
+                'fecha_dev' => '2026-02-05',
+                'created' => '2026-02-05 13:19:47',
+                'modified' => '2026-02-05 13:19:47',
             ],
         ];
         parent::init();

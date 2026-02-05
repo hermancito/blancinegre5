@@ -24,8 +24,8 @@ class ColegiofilesfamiliasFixture extends TestFixture
                 'colegio_id' => 1,
                 'file' => 'Lorem ipsum dolor sit amet',
                 'file_dir' => 'Lorem ipsum dolor sit amet',
-                'created' => '2026-02-04 11:31:31',
-                'modified' => '2026-02-04 11:31:31',
+                'created' => '2026-02-05 13:14:19',
+                'modified' => '2026-02-05 13:14:19',
             ],
         ];
         parent::init();

@@ -22,8 +22,8 @@ class AsistenciasFixture extends TestFixture
                 'id' => 1,
                 'alumno_id' => 1,
                 'activitatsgrup_id' => 1,
-                'created' => '2026-02-04',
-                'modified' => '2026-02-04',
+                'created' => '2026-02-05',
+                'modified' => '2026-02-05',
             ],
         ];
         parent::init();

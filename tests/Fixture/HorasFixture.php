@@ -20,7 +20,7 @@ class HorasFixture extends TestFixture
         $this->records = [
             [
                 'id' => 1,
-                'hora' => '11:31:43',
+                'hora' => '13:22:52',
             ],
         ];
         parent::init();

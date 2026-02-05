@@ -26,8 +26,8 @@ class DisponibilitatsFixture extends TestFixture
                 'tiponodisponibilitat_id' => 1,
                 'activitatsgrup_id' => 1,
                 'disponible' => 1,
-                'created' => '2026-02-04 11:31:42',
-                'modified' => '2026-02-04 11:31:42',
+                'created' => '2026-02-05 13:21:20',
+                'modified' => '2026-02-05 13:21:20',
             ],
         ];
         parent::init();

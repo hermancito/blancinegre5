@@ -61,8 +61,8 @@ class ComercialsFixture extends TestFixture
                 'empresa_id' => 1,
                 'empresados_id' => 1,
                 'empresatres_id' => 1,
-                'created' => '2026-02-04 11:31:40',
-                'modified' => '2026-02-04 11:31:40',
+                'created' => '2026-02-05 13:16:36',
+                'modified' => '2026-02-05 13:16:36',
             ],
         ];
         parent::init();

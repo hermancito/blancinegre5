@@ -22,10 +22,10 @@ class DiasVolantesFixture extends TestFixture
                 'id' => 1,
                 'dia_id' => 1,
                 'volante_id' => 1,
-                'hora_ini' => '11:31:41',
-                'hora_fin' => '11:31:41',
-                'created' => '2026-02-04 11:31:41',
-                'modified' => '2026-02-04 11:31:41',
+                'hora_ini' => '13:20:42',
+                'hora_fin' => '13:20:42',
+                'created' => '2026-02-05 13:20:42',
+                'modified' => '2026-02-05 13:20:42',
             ],
         ];
         parent::init();
