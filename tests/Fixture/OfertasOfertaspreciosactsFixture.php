@@ -23,8 +23,8 @@ class OfertasOfertaspreciosactsFixture extends TestFixture
                 'ofertaspreciosact_id' => 1,
                 'oferta_id' => 1,
                 'ofertashorario_id' => 1,
-                'created' => '2026-02-04 11:31:45',
-                'modified' => '2026-02-04 11:31:45',
+                'created' => '2026-02-10 11:03:07',
+                'modified' => '2026-02-10 11:03:07',
                 'horario' => 'Lorem ipsum dolor sit amet',
             ],
         ];

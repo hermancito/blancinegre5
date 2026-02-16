@@ -31,8 +31,8 @@ class SalariosFixture extends TestFixture
                 'absentismo' => 1,
                 'dto' => 1,
                 'nomina' => 1,
-                'created' => '2026-02-04 11:31:46',
-                'modified' => '2026-02-04 11:31:46',
+                'created' => '2026-02-16 08:59:54',
+                'modified' => '2026-02-16 08:59:54',
             ],
         ];
         parent::init();

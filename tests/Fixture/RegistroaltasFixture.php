@@ -27,9 +27,9 @@ class RegistroaltasFixture extends TestFixture
                 'alta_amplia' => 'Lorem ipsum dolor ',
                 'material' => 'Lorem ipsum dolor sit amet',
                 'observ' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
-                'fecha_alta' => '2026-02-04',
-                'created' => '2026-02-04 11:31:46',
-                'modified' => '2026-02-04 11:31:46',
+                'fecha_alta' => '2026-02-10',
+                'created' => '2026-02-10 11:04:51',
+                'modified' => '2026-02-10 11:04:51',
             ],
         ];
         parent::init();

@@ -22,8 +22,8 @@ class NotasUsersFixture extends TestFixture
                 'id' => 1,
                 'nota_id' => 1,
                 'user_id' => 1,
-                'created' => '2026-02-04 11:31:43',
-                'modified' => '2026-02-04 11:31:43',
+                'created' => '2026-02-10 09:01:36',
+                'modified' => '2026-02-10 09:01:36',
             ],
         ];
         parent::init();

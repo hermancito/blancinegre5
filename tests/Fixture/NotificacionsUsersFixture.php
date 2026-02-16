@@ -22,8 +22,8 @@ class NotificacionsUsersFixture extends TestFixture
                 'id' => 1,
                 'notificacion_id' => 1,
                 'user_id' => 1,
-                'created' => '2026-02-04 11:31:44',
-                'modified' => '2026-02-04 11:31:44',
+                'created' => '2026-02-10 11:00:56',
+                'modified' => '2026-02-10 11:00:56',
             ],
         ];
         parent::init();

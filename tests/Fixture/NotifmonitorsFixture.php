@@ -28,8 +28,8 @@ class NotifmonitorsFixture extends TestFixture
                 'validado' => 1,
                 'comodin' => 'Lorem ipsum dolor sit amet',
                 'tipo_monitor' => 'Lorem ipsum d',
-                'created' => '2026-02-04 11:31:44',
-                'modified' => '2026-02-04 11:31:44',
+                'created' => '2026-02-10 11:01:54',
+                'modified' => '2026-02-10 11:01:54',
             ],
         ];
         parent::init();

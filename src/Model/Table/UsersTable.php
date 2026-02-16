@@ -72,9 +72,9 @@ class UsersTable extends Table
           //  'foreignKey' => 'user2_id'
         //]);
 
-        //$this->hasMany('Notas', [
-          //  'foreignKey' => 'user_id'
-        //]);
+        $this->hasMany('Notas', [
+            'foreignKey' => 'user_id'
+        ]);
 
         $this->hasMany('Notificacions', [
             'foreignKey' => 'user_id'
@@ -104,9 +104,7 @@ class UsersTable extends Table
         $this->hasMany('Monitorsfiles', [
             'foreignKey' => 'monitor_id'
         ]);
-        $this->hasMany('Boletines', [
-            'foreignKey' => 'user_id'
-        ]);
+        
         $this->belongsToMany('Activitats', [
             'foreignKey' => 'user_id',
             'targetForeignKey' => 'activitat_id',

@@ -22,8 +22,8 @@ class NotifcolegiosUsersFixture extends TestFixture
                 'id' => 1,
                 'notifcolegio_id' => 1,
                 'user_id' => 1,
-                'created' => '2026-02-04 11:31:44',
-                'modified' => '2026-02-04 11:31:44',
+                'created' => '2026-02-10 10:30:11',
+                'modified' => '2026-02-10 10:30:11',
             ],
         ];
         parent::init();
