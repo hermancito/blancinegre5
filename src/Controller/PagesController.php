@@ -64,13 +64,15 @@ class PagesController extends AppController
         $anyo_actual = intval(date("Y"));
         $dia_actual = intval(date("j"));
         $mes_actual = intval(date("n"));
-        $this->fetchTable('Actualizautomaticas');
-        $existe_act_cursos = $this->Actualizautomaticas->find()->where(['anyo'=>$anyo_actual])
-            ->andWhere(['tipo'=>'cursos'])->count();
+        //$this->fetchTable('Actualizautomaticas');
+        //$existe_act_cursos = $this->Actualizautomaticas->find()->where(['anyo'=>$anyo_actual])
+          //  ->andWhere(['tipo'=>'cursos'])->count();
+        $existe_act_cursos = $this->fetchTable('Actualizautomaticas')->find('all',
+            conditions: ['anyo'=>$anyo_actual, 'tipo'=>'cursos'])->count();
         if ($dia_actual > 8 && $mes_actual > 6 && $existe_act_cursos == 0){
             $this->croncursos();
         }
-        $existe_act_codigos = $this->Actualizautomaticas->find()->where(['anyo'=>$anyo_actual])
+        $existe_act_codigos = $this->fetchTable('Actualizautomaticas')->find()->where(['anyo'=>$anyo_actual])
             ->andWhere(['tipo'=>'codigos'])->count();
         if ($dia_actual > 8 && $mes_actual > 6 && $existe_act_codigos == 0){
             $this->croncodigos();
@@ -90,11 +92,11 @@ class PagesController extends AppController
 
     //función a ejecutar el 15 de Agosto
     public function croncursos(){
-        $this->fetchTable('Alumnos');
+        //$this->fetchTable('Alumnos');
         $msg = false;
         $anyo_actual = intval(date("Y"));
         $patron = '/\w{2}\d{1}\w/';
-        $cursos_alumnos = $this->Alumnos->find()->select(['id','curso']);
+        $cursos_alumnos = $this->fetchTable('Alumnos')->find()->select(['id','curso']);
         foreach ($cursos_alumnos as $ca){
             $curso = $ca->curso;
             $curso_actualiz = $ca->curso_actualizado;
@@ -116,17 +118,16 @@ class PagesController extends AppController
                     }else{
                         $new_curso = $curso;
                     }
-                    $query = $this->Alumnos->query();
-                    $query->update()
-                        ->set(['curso' => $new_curso])
+                    $query = $this->fetchTable('Alumnos')->updateQuery();
+                    $query->set(['curso' => $new_curso])
                         ->where(['id' => $ca->id])
                         ->execute();
 
                 }
             }
         }
-        $this->fetchTable('Actualizautomaticas');
-        $query = $this->Actualizautomaticas->query();
+        
+        $query = $this->fetchTable('Alumnos')->insertQuery();
         $query->insert(['tipo', 'anyo'])
             ->values([
                 'tipo' => 'cursos',
@@ -137,11 +138,10 @@ class PagesController extends AppController
     }
 
     public function croncodigos(){
-        $this->fetchTable('Alumnos');
         $msg = false;
         $anyo_actual = intval(date("Y"));
         $patron = '/\w{4}-\d{6}/';
-        $codigos_alumnos = $this->Alumnos->find()->select(['id','codigo']);
+        $codigos_alumnos = $this->fetchTable('Alumnos')->find()->select(['id','codigo']);
         foreach ($codigos_alumnos as $ca){
             $codigo = $ca->codigo;
             $coincide = preg_match( $patron, $codigo );
@@ -161,17 +161,16 @@ class PagesController extends AppController
                 }else{
                     $new_codigo = $codigo;
                 }
-                $query = $this->Alumnos->query();
-                $query->update()
-                    ->set(['codigo' => $new_codigo])
+                $query = $this->fetchTable('Alumnos')->updateQuery();
+                $query->set(['codigo' => $new_codigo])
                     ->where(['id' => $ca->id])
                     ->execute();
 
             }
 
         }
-        $this->fetchTable('Actualizautomaticas');
-        $query = $this->Actualizautomaticas->query();
+        //$this->fetchTable('Actualizautomaticas');
+        $query = $this->fetchTable('Alumnos')->insertQuery();
         $query->insert(['tipo', 'anyo'])
             ->values([
                 'tipo' => 'codigos',

@@ -21,8 +21,10 @@
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
 
-use Cake\Routing\Route\DashedRoute;
+use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Routing\RouteBuilder;
+use Cake\Routing\Router;
+use Cake\Routing\Route\DashedRoute;
 
 /*
  * This file is loaded in the context of the `Application` class.
@@ -47,37 +49,45 @@ return function (RouteBuilder $routes): void {
      * inconsistently cased URLs when used with `{plugin}`, `{controller}` and
      * `{action}` markers.
      */
-    $routes->setRouteClass(DashedRoute::class);
-
-    $routes->scope('/', function (RouteBuilder $builder): void {
-        /*
-         * Here, we are connecting '/' (base path) to a controller called 'Pages',
-         * its action called 'display', and we pass a param to select the view file
-         * to use (in this case, templates/Pages/home.php)...
-         */
-        $builder->connect('/', ['controller' => 'Pages', 'action' => 'display', 'home']);
-
-        /*
-         * ...and connect the rest of 'Pages' controller's URLs.
-         */
-        $builder->connect('/pages/*', 'Pages::display');
-
-        /*
-         * Connect catchall routes for all controllers.
-         *
-         * The `fallbacks` method is a shortcut for
-         *
-         * ```
-         * $builder->connect('/{controller}', ['action' => 'index']);
-         * $builder->connect('/{controller}/{action}/*', []);
-         * ```
-         *
-         * It is NOT recommended to use fallback routes after your initial prototyping phase!
-         * See https://book.cakephp.org/5/en/development/routing.html#fallbacks-method for more information
-         */
-        $builder->fallbacks();
+    $routes->setExtensions(['json', 'xlsx']);
+    $routes->resources('Users', function (RouteBuilder $routes) {
+        $routes->resources('Roles');
     });
 
+    $routes->connect('/', ['controller' => 'Users', 'action' => 'login']);
+    //$routes->setRouteClass(DashedRoute::class);
+
+    // $routes->scope('/', function (RouteBuilder $builder): void {
+    //     /*
+    //      * Here, we are connecting '/' (base path) to a controller called 'Pages',
+    //      * its action called 'display', and we pass a param to select the view file
+    //      * to use (in this case, templates/Pages/home.php)...
+    //      */
+    //     $builder->connect('/', ['controller' => 'Pages', 'action' => 'display', 'home']);
+
+    //     /*
+    //      * ...and connect the rest of 'Pages' controller's URLs.
+    //      */
+    //     $builder->connect('/pages/*', 'Pages::display');
+
+    //     /*
+    //      * Connect catchall routes for all controllers.
+    //      *
+    //      * The `fallbacks` method is a shortcut for
+    //      *
+    //      * ```
+    //      * $builder->connect('/{controller}', ['action' => 'index']);
+    //      * $builder->connect('/{controller}/{action}/*', []);
+    //      * ```
+    //      *
+    //      * It is NOT recommended to use fallback routes after your initial prototyping phase!
+    //      * See https://book.cakephp.org/5/en/development/routing.html#fallbacks-method for more information
+    //      */
+    //     $builder->fallbacks();
+    // });
+    $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
+    $routes->connect('/Users/forgotpassword', ['controller' => 'Users', 'action' => 'forgotpassword']);
+    $routes->connect('/Users/resetpassword', ['controller' => 'Users', 'action' => 'resetpassword']);
     /*
      * If you need a different set of middleware or none at all,
      * open new scope and define routes there.
@@ -93,4 +103,5 @@ return function (RouteBuilder $routes): void {
      * });
      * ```
      */
+    $routes->fallbacks(DashedRoute::class);
 };

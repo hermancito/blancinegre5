@@ -10,6 +10,13 @@ namespace App\Controller;
  */
 class UsersController extends AppController
 {
+    public function beforeFilter(\Cake\Event\EventInterface $event)
+    {
+        parent::beforeFilter($event);
+
+        $this->Authentication->allowUnauthenticated(['login']);
+    }
+
     /**
      * Index method
      *
@@ -35,6 +42,50 @@ class UsersController extends AppController
     {
         $user = $this->Users->get($id, contain: ['Colegios', 'Activitats', 'Destinos', 'Roles', 'Alumnos', 'Notas', 'Notificacions', 'Salarios', 'AlumnosXml', 'Notificacionpdfs', 'Colegiofiles', 'Colegiofilesfamilias', 'Coordinadorsfiles', 'Monitorsfiles', 'Boletines', 'Sustitucions', 'Eventos', 'Personalcontrols']);
         $this->set(compact('user'));
+    }
+
+    // public function login()
+    // {
+    //     if ($this->request->is('post')) {
+    //         //if ($this->Recaptcha->verify()) {
+    //             $user = $this->Auth->identify();
+    //             if ($user) {
+    //                 if ($user['validado'] == true && parent::isSupervisor($user) == false) {
+    //                     $this->Auth->setUser($user);
+    //                     return $this->redirect($this->Auth->redirectUrl());
+    //                 } else if ($user['validado'] == true && parent::isSupervisor($user) == true) {
+    //                     $this->Auth->setUser($user);
+    //                     return $this->redirect(['controller' => 'users', 'action' => 'mantenimientosuperv']);
+    //                 } else {
+    //                     $this->Flash->error('Tu acceso como usuario está pendiente de validación por el administrador', ['key' => 'auth']);
+    //                 }
+    //             } else {
+    //                 $this->Flash->error('Tu email o password son incorrectos.', ['key' => 'auth']);
+    //             }
+    //         /*}else{
+    //             $this->Flash->error(__('Por favor, checkea Recaptcha Box.'));
+    //         }*/
+    //     }
+    // }
+
+    public function login()
+    {
+        $result = $this->Authentication->getResult();
+        // If the user is logged in send them away.
+        if ($result && $result->isValid()) {
+            //$target = $this->Authentication->getLoginRedirect() ?? '/home';
+            $target = ['controller' => 'pages', 'action' => 'home'];
+            return $this->redirect($target);
+        }
+        if ($this->request->is('post')) {
+            $this->Flash->error('Invalid username or password');
+        }
+    }
+
+    public function logout()
+    {
+        $this->Authentication->logout();
+        return $this->redirect(['controller' => 'Users', 'action' => 'login']);
     }
 
     /**
