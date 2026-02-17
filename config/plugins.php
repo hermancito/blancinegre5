@@ -12,4 +12,5 @@ return [
         'onlyCli' => true,
     ],
     'Josegonzalez/Upload' => [],
+    'BootstrapUI' => [],
 ];
