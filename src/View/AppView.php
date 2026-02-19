@@ -17,6 +17,7 @@ namespace App\View;
 
 use Cake\View\View;
 use BootstrapUI\View\UIView;
+use BootstrapUI\View\UIViewTrait;
 
 /**
  * Application View
@@ -26,7 +27,11 @@ use BootstrapUI\View\UIView;
  * @link https://book.cakephp.org/5/en/views.html#the-app-view
  */
 class AppView extends UIView {
+
+    use UIViewTrait;
+
     public function initialize(): void {
-        parent::initialize();
+        //parent::initialize();
+        $this->initializeUI(['layout'=>false]);
     }
 }

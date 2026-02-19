@@ -59,6 +59,7 @@ class Application extends BaseApplication implements AuthenticationServiceProvid
         // By default, does not allow fallback classes.
         FactoryLocator::add('Table', (new TableLocator())->allowFallbackClass(false));
         $this->addPlugin('Authentication');
+        
     }
 
     /**
