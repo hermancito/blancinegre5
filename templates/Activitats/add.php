@@ -1,40 +1,112 @@
-<?php
-/**
- * @var \App\View\AppView $this
- * @var \App\Model\Entity\Activitat $activitat
- * @var \Cake\Collection\CollectionInterface|string[] $alumnos
- * @var \Cake\Collection\CollectionInterface|string[] $colegios
- * @var \Cake\Collection\CollectionInterface|string[] $dias
- * @var \Cake\Collection\CollectionInterface|string[] $monitors
- * @var \Cake\Collection\CollectionInterface|string[] $registroaltas
- * @var \Cake\Collection\CollectionInterface|string[] $users
- */
-?>
-<div class="row">
-    <aside class="column">
-        <div class="side-nav">
-            <h4 class="heading"><?= __('Actions') ?></h4>
-            <?= $this->Html->link(__('List Activitats'), ['action' => 'index'], ['class' => 'side-nav-item']) ?>
+<div class="col-md-12">
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <h3 class="panel-title">Alta de Actividad</h3>
         </div>
-    </aside>
-    <div class="column column-80">
-        <div class="activitats form content">
+        <div class="col-md-12 well">
+            <p>Es recomendable que los nombres de las actividades no contengan espacios en blanco</p>
+        </div>
+        <div class="panel-body">
             <?= $this->Form->create($activitat) ?>
-            <fieldset>
-                <legend><?= __('Add Activitat') ?></legend>
-                <?php
-                    echo $this->Form->control('nombre');
-                    echo $this->Form->control('codigo');
-                    echo $this->Form->control('alumnos._ids', ['options' => $alumnos]);
-                    echo $this->Form->control('colegios._ids', ['options' => $colegios]);
-                    echo $this->Form->control('dias._ids', ['options' => $dias]);
-                    echo $this->Form->control('monitors._ids', ['options' => $monitors]);
-                    echo $this->Form->control('registroaltas._ids', ['options' => $registroaltas]);
-                    echo $this->Form->control('users._ids', ['options' => $users]);
-                ?>
-            </fieldset>
-            <?= $this->Form->button(__('Submit')) ?>
+            <div class="row">
+                <div class="form-group col-md-8">
+                    <label>Nombre de la actividad</label>
+                    <?php
+                    echo $this->Form->control('nombre', ['label'=>'']);
+                    ?>
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Código de la actividad</label>
+                    <?php
+                    echo $this->Form->control('codigo', ['label'=>'']);
+                    ?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label>Centro/s donde se hace la actividad</label>
+                    <?php
+                    echo $this->Form->control('colegios._ids', ['options' => $colegios, 'multiple'=>true ,'class'=>'multiusers', 'label'=>'']);
+                    ?>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Monitores en la actividad</label>
+                    <?php
+                    echo $this->Form->control('monitors._ids', ['options' => $monitors, 'multiple'=>true ,'class'=>'multimonit', 'label'=>'']);
+                    ?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label>Editores de la actividad</label>
+                    <?php
+                    echo $this->Form->control('users._ids', ['options' => $editors, 'multiple'=>true ,'class'=>'multieditors', 'label'=>'']);
+                    ?>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Visores de la actividad</label>
+                    <?php
+                    echo $this->Form->control('visors', ['options' => $visors, 'multiple'=>true ,'class'=>'multivisors', 'label'=>'']);
+                    ?>
+                </div>
+            </div>
+            <!--<div class="row">
+                <div class="form-group col-md-6">
+                    <label>Dias en que se realiza la actividad</label>
+                    <?php
+/*                    echo $this->Form->control('dias._ids', ['options' => $dias, 'class'=>'multidias','label'=>'']);
+                    */?>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Alumnos que realizan la actividad</label>
+                    <?php
+/*                    echo $this->Form->control('alumnos._ids', ['options' => $alumnos, 'class'=>'multialum', 'label'=>'']);
+                    */?>
+                </div>
+            </div>-->
+
+            <?= $this->Form->button(__('Guardar'), ['class'=>'btn-success']) ?>
             <?= $this->Form->end() ?>
         </div>
     </div>
 </div>
+<script>
+    $(function() {
+        $('.multiusers').change(function() {
+            //console.log($(this).val());
+        }).multipleSelect({
+            width: '100%',
+            placeholder: 'Selecciona el colegio/os deonde se realiza la actividad'
+        });
+        $('.multidias').change(function() {
+            //console.log($(this).val());
+        }).multipleSelect({
+            width: '100%',
+            placeholder: 'Selecciona el dia o dias que se realiza la actividad'
+        });
+        $('.multialum').change(function() {
+            //console.log($(this).val());
+        }).multipleSelect({
+            width: '100%',
+            placeholder: 'Selecciona los alumnos que realizan la actividad'
+        });
+        $('.multimonit').change(function() {
+            //console.log($(this).val());
+        }).multipleSelect({
+            width: '100%',
+            placeholder: 'Selecciona monitores en la actividad'
+        });
+        $('.multieditors').change(function() {
+            //console.log($(this).val());
+        }).multipleSelect({
+            width: '100%',
+            placeholder: 'Selecciona editores en la actividad'
+        });
+        $('.multivisors').change(function() {
+            //console.log($(this).val());
+        }).multipleSelect({
+            width: '100%',
+            placeholder: 'Selecciona visores en la actividad'
+        });
+    });
+</script>

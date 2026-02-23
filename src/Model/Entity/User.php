@@ -121,9 +121,9 @@ class User extends Entity
         return null;
     }
     
-    protected function _getLabel()
+    protected function _getLabel(): ?string
     {
-        return $this->_properties['nombre'] . ' ' . $this->_properties['apellidos']
-            . ' / ' .$this->_properties['username'];
+        return $this->_fields['nombre'] . ' ' . $this->_fields['apellidos']
+            . ' / ' .$this->_fields['username'];
     }
 }

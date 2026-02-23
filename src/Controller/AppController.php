@@ -57,64 +57,67 @@ class AppController extends Controller
         // for all controllers in our application, make index and view
         // actions public, skipping the authentication check
         $this->Authentication->allowUnauthenticated(['index', 'view']);
-        $this->set('current_user', $this->Authentication->getIdentity());
-        $rolesusuario = $this->rolesxuser($this->Authentication->getIdentity());
-        if (count($rolesusuario)==1){
-            if ($this->isAdmin($this->Authentication->getIdentity()) === true){
-                $this->set('admin_user', $this->Authentication->getIdentity());
-            }
-            if ($this->isGestor($this->Authentication->getIdentity()) === true){
-                $this->set('gestor_user_auth', $this->Authentication->getIdentity());
-            }
-            if ($this->isGestorRRHH($this->Authentication->getIdentity()) === true){
-                $this->set('gestorRRHH_user_auth', $this->Authentication->getIdentity());
-            }
-            if ($this->isCoord($this->Authentication->getIdentity()) === true){
-                $this->set('coord_user_auth', $this->Authentication->getIdentity());
-            }
-            if ($this->isSupervisor($this->Authentication->getIdentity()) === true){
-                $this->set('superv_user_auth', $this->Authentication->getIdentity());
-            }
-            if ($this->isEditorAct($this->Authentication->getIdentity()) === true){
-                $this->set('editor_act_auth', $this->Authentication->getIdentity());
-            }
-            if ($this->isVisorAct($this->Authentication->getIdentity()) === true){
-                $this->set('visor_act_auth', $this->Authentication->getIdentity());
-            }
-        }else if(count($rolesusuario)>1){
-            if(in_array(1, $rolesusuario)){
-                $this->set('admin_user', $this->Authentication->getIdentity());
-            }
-            if(in_array(6, $rolesusuario)){
-                $this->set('gestor_user_auth', $this->Authentication->getIdentity());
-            }
-            if(in_array(7, $rolesusuario)){
-                $this->set('gestorRRHH_user_auth', $this->Authentication->getIdentity());
-            }
-            if(in_array(8, $rolesusuario)){
-                $this->set('editor_act_auth', $this->Authentication->getIdentity());
-            }
-            if(in_array(6, $rolesusuario) && in_array(5, $rolesusuario)){
-                $this->set('gestor_coord_user_auth', $this->Authentication->getIdentity());
+        $result = $this->Authentication->getResult();
+        if ($result && $result->isValid()) {
+            $this->set('current_user', $this->Authentication->getIdentity());
+            $rolesusuario = $this->rolesxuser($this->Authentication->getIdentity());
+            if (count($rolesusuario)==1){
+                if ($this->isAdmin($this->Authentication->getIdentity()) === true){
+                    $this->set('admin_user', $this->Authentication->getIdentity());
+                }
+                if ($this->isGestor($this->Authentication->getIdentity()) === true){
+                    $this->set('gestor_user_auth', $this->Authentication->getIdentity());
+                }
+                if ($this->isGestorRRHH($this->Authentication->getIdentity()) === true){
+                    $this->set('gestorRRHH_user_auth', $this->Authentication->getIdentity());
+                }
+                if ($this->isCoord($this->Authentication->getIdentity()) === true){
+                    $this->set('coord_user_auth', $this->Authentication->getIdentity());
+                }
+                if ($this->isSupervisor($this->Authentication->getIdentity()) === true){
+                    $this->set('superv_user_auth', $this->Authentication->getIdentity());
+                }
+                if ($this->isEditorAct($this->Authentication->getIdentity()) === true){
+                    $this->set('editor_act_auth', $this->Authentication->getIdentity());
+                }
+                if ($this->isVisorAct($this->Authentication->getIdentity()) === true){
+                    $this->set('visor_act_auth', $this->Authentication->getIdentity());
+                }
+            }else if(count($rolesusuario)>1){
+                if(in_array(1, $rolesusuario)){
+                    $this->set('admin_user', $this->Authentication->getIdentity());
+                }
+                if(in_array(6, $rolesusuario)){
+                    $this->set('gestor_user_auth', $this->Authentication->getIdentity());
+                }
+                if(in_array(7, $rolesusuario)){
+                    $this->set('gestorRRHH_user_auth', $this->Authentication->getIdentity());
+                }
+                if(in_array(8, $rolesusuario)){
+                    $this->set('editor_act_auth', $this->Authentication->getIdentity());
+                }
+                if(in_array(6, $rolesusuario) && in_array(5, $rolesusuario)){
+                    $this->set('gestor_coord_user_auth', $this->Authentication->getIdentity());
 
-            }
-            if(in_array(7, $rolesusuario) && in_array(5, $rolesusuario)){
-                $this->set('gestorRRHH_user_auth', $this->Authentication->getIdentity());
+                }
+                if(in_array(7, $rolesusuario) && in_array(5, $rolesusuario)){
+                    $this->set('gestorRRHH_user_auth', $this->Authentication->getIdentity());
 
-            }
-            if(in_array(7, $rolesusuario) && in_array(6, $rolesusuario)){
-                $this->set('gestorRRHH_user_auth', $this->Authentication->getIdentity());
+                }
+                if(in_array(7, $rolesusuario) && in_array(6, $rolesusuario)){
+                    $this->set('gestorRRHH_user_auth', $this->Authentication->getIdentity());
 
-            }
-            if(!in_array(6, $rolesusuario) && in_array(5, $rolesusuario)){
-                $this->set('coord_user_auth', $this->Authentication->getIdentity());
+                }
+                if(!in_array(6, $rolesusuario) && in_array(5, $rolesusuario)){
+                    $this->set('coord_user_auth', $this->Authentication->getIdentity());
 
-            }
-            if(!in_array(7, $rolesusuario) && !in_array(6, $rolesusuario) && in_array(5, $rolesusuario)){
-                $this->set('coord_user_auth', $this->Authentication->getIdentity());
-            }
-            if(in_array(9, $rolesusuario)){
-                $this->set('visor_act_auth', $this->Authentication->getIdentity());
+                }
+                if(!in_array(7, $rolesusuario) && !in_array(6, $rolesusuario) && in_array(5, $rolesusuario)){
+                    $this->set('coord_user_auth', $this->Authentication->getIdentity());
+                }
+                if(in_array(9, $rolesusuario)){
+                    $this->set('visor_act_auth', $this->Authentication->getIdentity());
+                }
             }
         }
         

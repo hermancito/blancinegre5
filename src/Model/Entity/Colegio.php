@@ -126,4 +126,10 @@ class Colegio extends Entity
         'monitors' => true,
         'notifcolegios' => true,
     ];
+
+    protected function _getLabel()
+    {
+        return $this->_fields['username'].' ('. $this->_fields['poblacion'] .')/Código: ' . $this->_fields['codigo'];
+
+    }
 }

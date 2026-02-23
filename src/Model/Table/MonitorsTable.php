@@ -49,7 +49,7 @@ class MonitorsTable extends Table
         parent::initialize($config);
 
         $this->setTable('monitors');
-        $this->setDisplayField('username');
+        $this->setDisplayField('label');
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');

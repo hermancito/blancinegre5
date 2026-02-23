@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 namespace App\Controller;
+use Cake\View\JsonView;
 
 /**
  * Activitats Controller
@@ -10,20 +11,11 @@ namespace App\Controller;
  */
 class ActivitatsController extends AppController
 {
-    /**
-     * Index method
-     *
-     * @return \Cake\Http\Response|null|void Renders view
-     */
-    // public function index()
-    // {
+    public function viewClasses(): array
+    {
+        return [JsonView::class];
+    }
         
-
-    //     $query = $this->Activitats->find('all',contain: ['Activitatsgrups'=>['sort'=>'codigo'], 'Colegios'=>['sort'=>'username'], 'Monitors'=>['sort'=>'codigo'], 'Dias']);
-    //     $activitats = $this->paginate($query);
-
-    //     $this->set(compact('activitats'));
-    // }
     /**
      * Index method
      *
@@ -145,6 +137,17 @@ class ActivitatsController extends AppController
         $this->set('activitats', $this->paginate($query));
     }
 
+    public function indexrest()
+    {
+        $activitats = $this->Activitats->find('all')->contain(['Alumnos', 'Users']);
+        // $this->set([
+        //     'activitats' => $activitats,
+        //     '_serialize' => ['activitats']
+        // ]);
+        $this->set('activitats', $activitats);
+        $this->viewBuilder()->setOption('serialize', ['activitats']);
+    }
+
     /**
      * View method
      *
@@ -167,21 +170,60 @@ class ActivitatsController extends AppController
     {
         $activitat = $this->Activitats->newEmptyEntity();
         if ($this->request->is('post')) {
+            $data = $this->request->getData();
             $activitat = $this->Activitats->patchEntity($activitat, $this->request->getData());
-            if ($this->Activitats->save($activitat)) {
-                $this->Flash->success(__('The activitat has been saved.'));
+            $existe_act = $this->Activitats->find()->where(['nombre'=>$activitat['nombre']])->count();
+            if($existe_act == 0){
+                if ($new_act = $this->Activitats->save($activitat)) {
+                    if($data['visors'] != ''){
+                        
+                        foreach($data['visors'] as $visor){
+                            $query = $this->fetchTable('ActivitatsUsers')->insertQuery();
+                            $query->insert(['activitat_id', 'user_id'])
+                                ->values([
+                                    'activitat_id' => $new_act->id,
+                                    'user_id' => $visor,
+                                ])
+                                ->execute();
+                        }
+                    }
+                    $this->Flash->success(__('Se ha grabado la actividad.'));
 
-                return $this->redirect(['action' => 'index']);
+                    return $this->redirect(['action' => 'index']);
+                }
+            }else{
+                $this->Flash->error(__('Ya existe una actividad con ese nombre.'));
             }
-            $this->Flash->error(__('The activitat could not be saved. Please, try again.'));
+
+            $this->Flash->error(__('No se ha grabado la actividad. Inténtalo de nuevo.'));
         }
-        $alumnos = $this->Activitats->Alumnos->find('list', limit: 200)->all();
-        $colegios = $this->Activitats->Colegios->find('list', limit: 200)->all();
-        $dias = $this->Activitats->Dias->find('list', limit: 200)->all();
-        $monitors = $this->Activitats->Monitors->find('list', limit: 200)->all();
-        $registroaltas = $this->Activitats->Registroaltas->find('list', limit: 200)->all();
-        $users = $this->Activitats->Users->find('list', limit: 200)->all();
-        $this->set(compact('activitat', 'alumnos', 'colegios', 'dias', 'monitors', 'registroaltas', 'users'));
+        $alumnos = $this->Activitats->Alumnos->find('list', ['limit' => 200]);
+        $colegios = $this->Activitats->Colegios->find('list')->orderBy(['username'=>'ASC']);
+
+        $editors = $this->Activitats->Users->find('list', [
+            'keyField' => 'id',
+            'valueField' => function ($user) {
+                return $user->get('label');
+            }
+        ]);
+        //cogemos solo los usuario del rol editor
+        $editors->matching('Roles', function ($q) {
+            return $q->where(['Roles.id' => 8]);
+        });
+        $visors = $this->Activitats->Users->find('list', [
+            'keyField' => 'id',
+            'valueField' => function ($user) {
+                return $user->get('label');
+            }
+        ]);
+        //cogemos solo los usuario del rol editor
+        $visors->matching('Roles', function ($q) {
+            return $q->where(['Roles.id' => 9]);
+        });
+
+        $monitors = $this->Activitats->Monitors->find('list')->where(['Monitors.validado'=>true])->orderBy(['Monitors.nombre']);
+        $dias = $this->Activitats->Dias->find('list', ['limit' => 200]);
+        $this->set(compact('activitat', 'alumnos', 'colegios', 'dias', 'monitors', 'editors', 'visors'));
     }
 
     /**

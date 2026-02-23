@@ -66,4 +66,10 @@ class Monitor extends Entity
         'colegios' => true,
         'coordinadors' => true,
     ];
+
+    protected function _getLabel(): ?string
+    {
+        return $this->_fields['nombre'] . ' ' . $this->_fields['apellidos']
+            . ' / ' .$this->_fields['username'];
+    }
 }

@@ -58,7 +58,7 @@ class ColegiosTable extends Table
         parent::initialize($config);
 
         $this->setTable('colegios');
-        $this->setDisplayField('codigo');
+        $this->setDisplayField('label');
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
