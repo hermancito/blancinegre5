@@ -10,6 +10,14 @@ namespace App\Controller;
  */
 class ActivitatsColegiosController extends AppController
 {
+    public function beforeFilter(\Cake\Event\EventInterface $event): void
+    {
+        parent::beforeFilter($event);
+        // Configure the login action to not require authentication, preventing
+        // the infinite redirect loop issue
+        $this->Authentication->allowUnauthenticated(['colxactiv']);
+    }
+
     /**
      * Index method
      *
@@ -101,5 +109,60 @@ class ActivitatsColegiosController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    public function colxactiv()
+    {
+        $this->request->allowMethod(['post']);
+        if ($this->request->is('ajax')) {
+            $this->viewBuilder()->setClassName('Json');
+            //recibimos por ajax el id de la actividad
+            $this->request->allowMethod(['post']);
+            $data = $this->request->getData();
+            $id_act = $data['id_act'];
+            $colegios = $this->ActivitatsColegios->find()->where(['activitat_id'=>$id_act]);
+            $mi_lista_col = [];
+            $ids_col = [];
+            foreach ($colegios as $col) {
+                $ids_col[]= $col->colegio_id;
+
+            }
+            if (count($ids_col) != 0){
+                $selecc_col = $this->ActivitatsColegios->Colegios->find()->where(['id IN'=>$ids_col]);
+
+                foreach ($selecc_col as $sm){
+                    $colegio = $sm->codigo.'/'.$sm->username;
+                    $mi_lista_col[$sm->id]=[$colegio];
+
+                }
+                if (count($mi_lista_col) != 0){
+                    $this->set([
+                        'error1' => 'NO',
+                        'listacol' => $mi_lista_col,
+                        //'_serialize' => ['error1', 'listacol']
+                    ]);
+                    $this->viewBuilder()->setOption('serialize', ['error1', 'listacol']);
+
+                }else{
+                    $this->set([
+                        'error1' => 'SI',
+                        'listacol' => $mi_lista_col,
+                        //'_serialize' => ['error1']
+                    ]);
+                    $this->viewBuilder()->setOption('serialize', ['error1', 'listacol']);
+
+                }
+            }else{
+                $this->set([
+                    'error1' => 'SI',
+                    'listacol' => $mi_lista_col,
+                    //'_serialize' => ['error1']
+                ]);
+                $this->viewBuilder()->setOption('serialize', ['error1', 'listacol']);
+
+            }
+            
+        }
+        
     }
 }
