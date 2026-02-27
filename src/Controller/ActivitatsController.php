@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 use Cake\View\JsonView;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 /**
  * Activitats Controller
@@ -273,4 +275,88 @@ class ActivitatsController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
+
+    public function exportexcel()
+    {
+        // Traemos las actividades con relaciones
+        $activitats = $this->Activitats->find()
+            ->contain(['Activitatsgrups', 'Colegios', 'Monitors']);
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Cabecera
+        $sheet->fromArray([
+            'id',
+            'Nombre actividad',
+            'Código',
+            'Creado',
+            'Modificado',
+            'Monitores',
+            'Colegios',
+            'Grupos'
+        ], null, 'A1');
+
+        $filaExcel = 2;
+
+        foreach ($activitats as $cf) {
+            // MONITORES
+            $monitors = [];
+            if (!empty($cf->monitors)) {
+                foreach ($cf->monitors as $monit) {
+                    $user = $this->Activitats->Users->get($monit->id);
+                    $monitors[] = $user?->username ? $user->username . ' - ' : '';
+                }
+            }
+
+            // COLEGIOS
+            $colegios = [];
+            if (!empty($cf->colegios)) {
+                foreach ($cf->colegios as $col) {
+                    $user = $this->Activitats->Colegios->get($col->id);
+                    $colegios[] = $user?->username ? $user->username . ' - ' : '';
+                }
+            }
+
+            // GRUPOS
+            $grups = [];
+            if (!empty($cf->activitatsgrups)) {
+                foreach ($cf->activitatsgrups as $grup) {
+                    $g = $this->Activitats->Activitatsgrups->get($grup->id);
+                    $grups[] = $g?->codigo ? $g->codigo . ' - ' : '';
+                }
+            }
+
+            // Preparamos la fila para Excel
+            $fila = [
+                $cf->id,
+                $cf->nombre ?? '',
+                $cf->codigo ?? '',
+                $cf->created ? $cf->created->format('Y-m-d H:i:s') : '',
+                $cf->modified ? $cf->modified->format('Y-m-d H:i:s') : '',
+                implode('', $monitors),
+                implode('', $colegios),
+                implode('', $grups)
+            ];
+
+            $sheet->fromArray($fila, null, 'A' . $filaExcel);
+            $filaExcel++;
+        }
+
+        // Preparar descarga
+        $filename = "actividades.xlsx";
+
+        $this->response = $this->response->withType(
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        );
+        $this->response = $this->response->withDownload($filename);
+
+        $writer = new Xlsx($spreadsheet);
+        ob_start();
+        $writer->save('php://output');
+        $excelOutput = ob_get_clean();
+
+        return $this->response->withStringBody($excelOutput);
+    }
+    
 }
