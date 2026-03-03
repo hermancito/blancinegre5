@@ -1,119 +1,208 @@
 <?php
 /**
  * @var \App\View\AppView $this
- * @var iterable<\App\Model\Entity\User> $users
+ * @var \App\Model\Entity\User[]|\Cake\Collection\CollectionInterface $users
  */
 ?>
-<div class="users index content">
-    <?= $this->Html->link(__('New User'), ['action' => 'add'], ['class' => 'button float-right']) ?>
-    <h3><?= __('Users') ?></h3>
-    <div class="table-responsive">
-        <table>
+<div class="col-md-12">
+    <div class="panel panel-success">
+        <div class="panel-heading col-md-12">
+            <div class="col-md-4">
+                <h3 class="panel-title">Usuarios</h3>
+            </div>
+            <div class="col-md-6">
+                <?= $this->Form->create($users, ['type' => 'get', 'class'=>'form-inline']) ?>
+                <div class="form-group">
+                    <?php
+                    echo $this->Form->control('PrgSearch', ['label'=>'', 'placeholder' => 'Buscar usuarios']);
+                    ?>
+                </div>
+                <div class="form-group">
+                    <?= $this->Form->button(__('Buscar',['action' => 'index'])) ?>
+                </div>
+                <?= $this->Form->end() ?>
+            </div>
+            <div class="col-md-2">
+                <?= $this->Html->link(__('Excel'), ['action' => 'exportexcel', '_ext'=>'xlsx'], ['class'=>"btn btn-sm btn-success glyphicon glyphicon-save-file"]); ?>
+            </div>
+        </div>
+        <div class="panel-body">
+            <table class="table table-striped">
             <thead>
                 <tr>
-                    <th><?= $this->Paginator->sort('id') ?></th>
-                    <th><?= $this->Paginator->sort('codigo') ?></th>
-                    <th><?= $this->Paginator->sort('username') ?></th>
-                    <th><?= $this->Paginator->sort('email') ?></th>
-                    <th><?= $this->Paginator->sort('photo') ?></th>
-                    <th><?= $this->Paginator->sort('photo_dir') ?></th>
-                    <th><?= $this->Paginator->sort('nombre') ?></th>
-                    <th><?= $this->Paginator->sort('apellidos') ?></th>
-                    <th><?= $this->Paginator->sort('tfno1') ?></th>
-                    <th><?= $this->Paginator->sort('tfno2') ?></th>
-                    <th><?= $this->Paginator->sort('nif') ?></th>
-                    <th><?= $this->Paginator->sort('validado') ?></th>
-                    <th><?= $this->Paginator->sort('bolsa') ?></th>
-                    <th><?= $this->Paginator->sort('created') ?></th>
-                    <th><?= $this->Paginator->sort('modified') ?></th>
-                    <th><?= $this->Paginator->sort('datos') ?></th>
-                    <th><?= $this->Paginator->sort('info_mail') ?></th>
-                    <th><?= $this->Paginator->sort('sexo') ?></th>
-                    <th><?= $this->Paginator->sort('seg_soc') ?></th>
-                    <th><?= $this->Paginator->sort('iban') ?></th>
-                    <th><?= $this->Paginator->sort('cuenta') ?></th>
-                    <th><?= $this->Paginator->sort('direccion') ?></th>
-                    <th><?= $this->Paginator->sort('poblacion') ?></th>
-                    <th><?= $this->Paginator->sort('cod_postal') ?></th>
-                    <th><?= $this->Paginator->sort('contrato') ?></th>
-                    <th><?= $this->Paginator->sort('fecha_ant') ?></th>
-                    <th><?= $this->Paginator->sort('carnet_cond') ?></th>
-                    <th><?= $this->Paginator->sort('vehiculo') ?></th>
-                    <th><?= $this->Paginator->sort('certif_antec') ?></th>
-                    <th><?= $this->Paginator->sort('mutua') ?></th>
-                    <th><?= $this->Paginator->sort('colegio_id') ?></th>
-                    <th><?= $this->Paginator->sort('fecha_nac') ?></th>
-                    <th><?= $this->Paginator->sort('token_dispositivo') ?></th>
-                    <th><?= $this->Paginator->sort('niv_ingles') ?></th>
-                    <th><?= $this->Paginator->sort('niv_valencia') ?></th>
-                    <th><?= $this->Paginator->sort('disponib') ?></th>
-                    <th class="actions"><?= __('Actions') ?></th>
+                    <th scope="col"><?= $this->Paginator->sort('codigo') ?></th>
+                    <th scope="col"><?= $this->Paginator->sort('username') ?></th>
+                    <th scope="col"><?= $this->Paginator->sort('role_id', $title = 'Rol/es') ?></th>
+                    <th scope="col"><?= $this->Paginator->sort('email') ?></th>
+                    <th scope="col"><?= $this->Paginator->sort('nombre') ?></th>
+                    <th scope="col"><?= $this->Paginator->sort('apellidos') ?></th>
+                    <th scope="col"><?= $this->Paginator->sort('validado') ?></th>
+                    <th scope="col" class="actions"><?= __('Actions') ?></th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($users as $user): ?>
                 <tr>
-                    <td><?= $this->Number->format($user->id) ?></td>
                     <td><?= h($user->codigo) ?></td>
                     <td><?= h($user->username) ?></td>
+                    <?php if (!empty($user->roles)): ?>
+                    <td><table cellpadding="0" cellspacing="0">
+                            <?php foreach ($user->roles as $role): ?>
+                            <tr>
+                                <td><?= h($role->name) ?> &nbsp</td>
+                                <?php endforeach; ?>
+                            </tr>
+                        </table></td>
+                    <?php
+                    else:?>
+                    <td></td>
+                    <?php
+                    endif; ?>
                     <td><?= h($user->email) ?></td>
-                    <td><?= h($user->photo) ?></td>
-                    <td><?= h($user->photo_dir) ?></td>
                     <td><?= h($user->nombre) ?></td>
                     <td><?= h($user->apellidos) ?></td>
-                    <td><?= $user->tfno1 === null ? '' : $this->Number->format($user->tfno1) ?></td>
-                    <td><?= $user->tfno2 === null ? '' : $this->Number->format($user->tfno2) ?></td>
-                    <td><?= h($user->nif) ?></td>
-                    <td><?= h($user->validado) ?></td>
-                    <td><?= h($user->bolsa) ?></td>
-                    <td><?= h($user->created) ?></td>
-                    <td><?= h($user->modified) ?></td>
-                    <td><?= h($user->datos) ?></td>
-                    <td><?= h($user->info_mail) ?></td>
-                    <td><?= h($user->sexo) ?></td>
-                    <td><?= h($user->seg_soc) ?></td>
-                    <td><?= h($user->iban) ?></td>
-                    <td><?= h($user->cuenta) ?></td>
-                    <td><?= h($user->direccion) ?></td>
-                    <td><?= h($user->poblacion) ?></td>
-                    <td><?= h($user->cod_postal) ?></td>
-                    <td><?= h($user->contrato) ?></td>
-                    <td><?= h($user->fecha_ant) ?></td>
-                    <td><?= h($user->carnet_cond) ?></td>
-                    <td><?= h($user->vehiculo) ?></td>
-                    <td><?= h($user->certif_antec) ?></td>
-                    <td><?= h($user->mutua) ?></td>
-                    <td><?= $user->hasValue('colegio') ? $this->Html->link($user->colegio->codigo, ['controller' => 'Colegios', 'action' => 'view', $user->colegio->id]) : '' ?></td>
-                    <td><?= h($user->fecha_nac) ?></td>
-                    <td><?= h($user->token_dispositivo) ?></td>
-                    <td><?= h($user->niv_ingles) ?></td>
-                    <td><?= h($user->niv_valencia) ?></td>
-                    <td><?= h($user->disponib) ?></td>
-                    <td class="actions">
-                        <?= $this->Html->link(__('View'), ['action' => 'view', $user->id]) ?>
-                        <?= $this->Html->link(__('Edit'), ['action' => 'edit', $user->id]) ?>
-                        <?= $this->Form->postLink(
-                            __('Delete'),
-                            ['action' => 'delete', $user->id],
-                            [
-                                'method' => 'delete',
-                                'confirm' => __('Are you sure you want to delete # {0}?', $user->id),
-                            ]
-                        ) ?>
+                    <td>
+                        <?php
+                        if(isset($admin_user)) {
+                            if ($user->validado == false) {
+                                echo $this->Form->button('NO', ['class' => 'btn btn-sm btn-danger cambiaValidoNO', 'id' => $user->id]);
+                            } else {
+                                echo $this->Form->button('SI', ['class' => 'btn btn-sm btn-success cambiaValidoSI', 'id' => $user->id]);
+                            }
+                        }else{
+                            if ($user->validado == false) {
+                                echo 'NO';
+                            } else {
+                                echo 'SI';
+                            }
+                        }
+                        ?>
+                    </td>
+
+                    <td style="width: 20%">
+                        <?= $this->Html->link(__('View'), ['action' => 'view', $user->id], ['class'=>'btn btn-sm btn-info']) ?>
+                        <?php
+                        $col = false;
+                        if(isset($admin_user)) {
+                            foreach ($user->roles as $role){
+                                if($role->id == 4){
+                                    $col = true;
+                                }
+                            }
+                            if($col == false) {
+                                ?>
+                                <?= $this->Html->link(__('Edit'), ['action' => 'edit', $user->id], ['class' => 'btn btn-sm btn-info']) ?>
+                                <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $user->id], ['class' => 'btn btn-sm btn-danger', 'confirm' => __('Are you sure you want to delete # {0}?', $user->id)]) ?>
+                                <?php
+                            }else{
+                                ?>
+                                <?= $this->Html->link(__('Edit'), ['action' => 'editcolegio', $user->id], ['class' => 'btn btn-sm btn-info']) ?>
+                                <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $user->id], ['class' => 'btn btn-sm btn-danger', 'confirm' => __('Are you sure you want to delete # {0}?', $user->id)]) ?>
+                                <?php
+                            }
+                        }else if(isset($gestor_user_auth)){
+                            foreach ($user->roles as $role){
+                                if($role->id == 4){
+                                    $col = true;
+                                }
+                            }
+                            if($col == false) {
+                                ?>
+                                <?= $this->Html->link(__('Edit'), ['action' => 'edit', $user->id], ['class' => 'btn btn-sm btn-info']) ?>
+
+                                <?php
+                            }else{
+                                ?>
+                                <?= $this->Html->link(__('Edit'), ['action' => 'editcolegio', $user->id], ['class' => 'btn btn-sm btn-info']) ?>
+
+                                <?php
+                            }
+                        }
+                        ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
-    </div>
-    <div class="paginator">
-        <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-            <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
-        </ul>
-        <p><?= $this->Paginator->counter(__('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')) ?></p>
+            <div class="paginator">
+                <ul class="pagination">
+                    <?= $this->Paginator->first('<< ' . __('first')) ?>
+                    <?= $this->Paginator->prev('< ' . __('previous')) ?>
+                    <?= $this->Paginator->numbers() ?>
+                    <?= $this->Paginator->next(__('next') . ' >') ?>
+                    <?= $this->Paginator->last(__('last') . ' >>') ?>
+                </ul>
+                <p><?= $this->Paginator->counter('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total') ?></p>
+            </div>
+        </div>
     </div>
 </div>
+
+<script>
+    var base = "<?php echo \Cake\Routing\Router::url('/'); ?>";
+      var basePath = "<?php echo $this->Url->build([
+            "controller" => "Users",
+            "action" => "cambia"]);
+            ; ?>";
+    //var basePath ='http://localhost/blancinegre/users/cambia'
+    $(document).ready(function(){
+
+        $('.cambiaValidoNO').on('click', function(event){
+            var iduser = $(this).attr("id");
+                $.ajax({
+                type: "POST",
+                url: basePath,
+                data:{
+                    id:$(this).attr("id")
+                },
+                dataType: "json",
+                success: function(data){
+                    if(data['error']=='NO'){
+                        $('#msg').html('<div class="alert alert-success flash-msg">'+data["mensaje"]+'</div>');
+                        //$('.flash-msg').delay(2000).fadeOut('slow');
+                        setTimeout(function () {
+                            //window.location.replace(base+"users/asocia/"+iduser);
+                            window.location.replace(base+"users/index");
+                        }, 2000)
+                    }else{
+                        $('#msg').html('<div class="alert alert-danger flash-msg">'+data["mensaje"]+'</div>');
+                    }
+
+                },
+                error: function(){
+                    alert('Tenemos problemas!!');
+                }
+            });
+            return false;
+        });
+
+        $('.cambiaValidoSI').on('click', function(event){
+            $.ajax({
+                type: "POST",
+                url: basePath,
+                data:{
+                    id:$(this).attr("id")
+                },
+                dataType: "json",
+                success: function(data){
+                    if(data['error']=='NO'){
+                        $('#msg').html('<div class="alert alert-success flash-msg">'+data["mensaje"]+'</div>');
+                        //$('.flash-msg').delay(2000).fadeOut('slow');
+                        setTimeout(function () {
+                            //window.location.replace(base+"users/asocia/"+iduser);
+                            window.location.replace(base+"users/index");
+                        }, 2000)
+                    }else{
+                        $('#msg').html('<div class="alert alert-danger flash-msg">'+data["mensaje"]+'</div>');
+                    }
+                },
+                error: function(){
+                    alert('Tenemos problemas!!');
+                }
+            });
+            return false;
+        });
+    });
+
+
+</script>

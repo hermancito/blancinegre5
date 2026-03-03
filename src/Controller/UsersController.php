@@ -15,7 +15,9 @@ class UsersController extends AppController
         parent::beforeFilter($event);
         // Configure the login action to not require authentication, preventing
         // the infinite redirect loop issue
-        $this->Authentication->allowUnauthenticated(['login', 'add']);
+        $this->Authentication->allowUnauthenticated(['login', 'logout', 'loginrest', 'addrest', 'editrest', 'existemailrest',
+            'indexrest', 'validarest', 'viewrest', 'cambiorolrest', 'validaNIF', 'okcambiopass', 'iosaddrest',
+            'grabaTokenDisp']);
     }
 
     /**
@@ -25,11 +27,74 @@ class UsersController extends AppController
      */
     public function index()
     {
-        $query = $this->Users->find()
-            ->contain(['Colegios']);
-        $users = $this->paginate($query);
+        // $query = $this->Users->find()
+        //     ->contain(['Colegios']);
+        // $users = $this->paginate($query);
 
-        $this->set(compact('users'));
+        // $this->set(compact('users'));
+        $conditions = [];
+
+        if (!empty($this->request->getQuery('PrgSearch'))) {
+            $searchText = $this->request->getQuery('PrgSearch');
+            // Buscamos todas los usuarios que contengan el string deseado
+            $usuarios = $this->Users->find('list')
+                ->where([
+                    'OR' => [
+                        'username LIKE' => "%$searchText%",
+                        'codigo LIKE' => "%$searchText%",
+                        'email LIKE' => "%$searchText%",
+                        'nombre LIKE' => "%$searchText%",
+                        'apellidos LIKE' => "%$searchText%",
+                    ]
+                ])->toArray();
+
+            // Buscamos todas los roles que contengan el string deseado
+            $roles = $this->Users->Roles->find('list')
+                ->where([
+                    'OR' => [
+                        'Roles.name LIKE' => "%$searchText%",
+
+                    ]
+                ])->toArray();
+
+            // Le pasamos como condición los id's previamente encontrados
+            if (!empty($usuarios)) {
+                $conditions['OR'][] = ['Users.id IN' => array_keys($usuarios)];
+            }
+
+            // Le pasamos como condición los id's previamente encontrados
+            if (!empty($roles)) {
+                $mis_users = [];
+                $conditions_roles = array_keys($roles);
+                
+                $users_rol = $this->fetchTable('RolesUsers')->find()->select(['user_id'])->where(['role_id' => $conditions_roles[0]]);
+                foreach ($users_rol as $user_rol){
+                    $mis_users[]= $user_rol->user_id;
+                }
+                $conditions['OR'][] = ['Users.id IN' => $mis_users];
+            }
+
+
+            // Si no existen colegio o archivo pasamos como id 0 para ser
+            // consistente y no mostrar ninún registro
+            if (empty($usuarios) && empty($roles)) {
+                $conditions = [
+                    'Users.id' => '0'
+                ];
+            }
+        }
+
+        $options = [
+            'conditions' => $conditions,
+            'contain' => ['Roles'],
+            'maxLimit' => 50,
+            'order' => [
+                'Users.username' => 'asc'
+            ]
+        ];
+        $query = $this->Users->find('all', ...$options);
+        $this->set('users', $this->paginate($query));
+
     }
 
     /**
