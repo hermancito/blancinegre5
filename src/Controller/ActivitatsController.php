@@ -33,11 +33,56 @@ class ActivitatsController extends AppController
             }else{
                 //si nuestro usuario sigue logeado pero no tiene acceso le mandamos un mensaje de que no tiene permisos
                 $this->Flash->error(__('No se puede acceder. Sólo usuarios administradores pueden acceder a esta acción'));
-                //$this->Authentication->logout();
                 return $this->redirect(['controller' => 'Users', 'action' => 'login']);
-                
             }
-        }else if(isset($user['validado']) and $user['validado']==false){
+        //GESTORES
+        }else if(isset($user['validado']) and $user['validado']==true and parent::isAdmin($user)==false and parent::isGestor($user)==true){
+            //si esta validado pero no es administrador puede acceder a las siguientes acciones
+            if(in_array($this->request->getParam('action'), [
+                'view',
+                'index',
+                'actxcolegio',
+                'obtieneUser',
+                'exportexcel',
+                'cargaactiv'
+                ])){
+                return true;
+            }else{
+                //si nuestro usuario sigue logeado pero no tiene acceso le mandamos un mensaje de que no tiene permisos
+                $this->Flash->error(__('No se puede acceder. Sólo usuarios administradores pueden acceder a esta acción'));
+                return $this->redirect(['controller' => 'Users', 'action' => 'login']);
+            }
+            //GESTORES RHHH
+        }else if(isset($user['validado']) and $user['validado']==true and parent::isAdmin($user)==false and parent::isGestorRRHH($user)==true){
+            //si esta validado pero no es administrador puede acceder a las siguientes acciones
+            if(in_array($this->request->getParam('action'), [
+                'view',
+                'index',
+                'actxcolegio',
+                'obtieneUser',
+                'exportexcel',
+                'cargaactiv'
+            ])){
+                return true;
+            }else{
+                //si nuestro usuario sigue logeado pero no tiene acceso le mandamos un mensaje de que no tiene permisos
+                $this->Flash->error(__('No se puede acceder. Sólo usuarios administradores pueden acceder a esta acción'));
+                return $this->redirect(['controller' => 'Users', 'action' => 'login']);
+            }
+            #SUPERVISORES
+        }else if(isset($user['validado']) and $user['validado']==true and parent::isAdmin($user)==false and parent::isSupervisor($user)==true){
+            //si esta validado pero no es administrador puede acceder a las siguientes acciones
+            if(in_array($this->request->getParam('action'), [
+                'supervisoractxcolegio',
+            ])){
+                return true;
+            }else{
+                //si nuestro usuario sigue logeado pero no tiene acceso le mandamos un mensaje de que no tiene permisos
+                $this->Flash->error(__('No se puede acceder. Sólo usuarios administradores pueden acceder a esta acción'));
+                return $this->redirect(['controller' => 'Users', 'action' => 'login']);
+            }
+        }
+        else if(isset($user['validado']) and $user['validado']==false){
             $this->Flash->error(__('No se puede acceder. Sólo usuarios administradores pueden acceder a esta acción'));
             return $this->redirect(['controller' => 'Users', 'action' => 'login']);
         }else{
@@ -187,7 +232,6 @@ class ActivitatsController extends AppController
     public function view($id = null)
     {
         $activitat = $this->Activitats->get($id, contain: ['Alumnos', 'Colegios', 'Dias', 'Monitors', 'Registroaltas', 'Users', 'Activitatsgrups', 'Notas', 'Notificacions', 'Sustitucions']);
-         $this->Flash->success(__('No se puede acceder. Sólo usuarios administradores pueden acceder a esta acción'));
         $this->set(compact('activitat'));
     }
 
