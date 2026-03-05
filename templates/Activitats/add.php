@@ -10,15 +10,13 @@
             <?= $this->Form->create($activitat) ?>
             <div class="row">
                 <div class="form-group col-md-8">
-                    <label>Nombre de la actividad</label>
                     <?php
-                    echo $this->Form->control('nombre', ['label'=>'']);
+                    echo $this->Form->control('nombre', ['label'=>'Nombre de la actividad']);
                     ?>
                 </div>
                 <div class="form-group col-md-4">
-                    <label>Código de la actividad</label>
                     <?php
-                    echo $this->Form->control('codigo', ['label'=>'']);
+                    echo $this->Form->control('codigo', ['label'=>'Código de la actividad']);
                     ?>
                 </div>
             </div>
@@ -65,7 +63,7 @@
                 </div>
             </div>-->
 
-            <?= $this->Form->button(__('Guardar'), ['class'=>'btn-success']) ?>
+            <?= $this->Form->button('Guardar', ['class' => 'btn btn-success']); ?>
             <?= $this->Form->end() ?>
         </div>
     </div>

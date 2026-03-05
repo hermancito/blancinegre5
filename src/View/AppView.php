@@ -12,7 +12,9 @@ class AppView extends View
         parent::initialize();
 
         $this->loadHelper('Html');
-        $this->loadHelper('Form');
+        $this->loadHelper('Form', [
+            'templates' => 'bootstrap_form',
+        ]);
         $this->loadHelper('Flash');
     }
 }
